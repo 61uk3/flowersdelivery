@@ -1,9 +1,10 @@
 package com.example.flowersdelivery.backend.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "flowers")
@@ -19,6 +20,9 @@ public class Flower extends AbstractEntity {
     @NotNull
     @Column(name = "price")
     private float flowerPrice = 0.0f;
+
+    @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
+    private List<Stock> stocks = new LinkedList<>();
 
     public String getFlowerName() {
         return flowerName;
