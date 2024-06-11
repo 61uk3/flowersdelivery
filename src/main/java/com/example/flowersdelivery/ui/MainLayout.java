@@ -2,6 +2,7 @@ package com.example.flowersdelivery.ui;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -23,7 +24,6 @@ public class MainLayout extends AppLayout {
         );
 
         HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), logo);
-        header.expand(logo);
         header.addClassNames(
                 LumoUtility.Padding.Vertical.NONE,
                 LumoUtility.Padding.Horizontal.MEDIUM
