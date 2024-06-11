@@ -6,6 +6,7 @@ import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.StockService;
 import com.example.flowersdelivery.backend.service.StoreService;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,11 +16,13 @@ import com.vaadin.flow.router.Route;
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Наличие цветов")
 class FlowerView extends VerticalLayout {
-
-    Grid<Stock> flowerGrid = new Grid<>(Stock.class);
     private FlowerService flowerService;
     private StoreService storeService;
     private StockService stockService;
+    FlowerBook flowerBook;
+    Button openFlowerBookBtn = new Button("Справочник");
+    Grid<Stock> flowerGrid = new Grid<>(Stock.class);
+
 
     FlowerView(
             FlowerService flowerService,
@@ -29,6 +32,10 @@ class FlowerView extends VerticalLayout {
         this.flowerService = flowerService;
         this.storeService = storeService;
         this.stockService = stockService;
+
+        flowerBook = new FlowerBook(flowerService);
+
+        openFlowerBookBtn.addClickListener(e -> flowerBook.open());
         addClassName("flower-view");
         setSizeFull();
         configureGrid();
@@ -37,7 +44,7 @@ class FlowerView extends VerticalLayout {
         content.addClassName("content");
         content.setSizeFull();
 
-        add(content);
+        add(openFlowerBookBtn, content);
         flowerGrid.setItems(stockService.findAll());
     }
 
