@@ -24,6 +24,9 @@ public class Flower extends AbstractEntity {
     @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
     private List<Stock> stocks = new LinkedList<>();
 
+    @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
+    private List<Supplie> supplies = new LinkedList<>();
+
     public String getFlowerName() {
         return flowerName;
     }

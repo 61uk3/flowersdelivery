@@ -20,6 +20,8 @@ public class Store extends AbstractEntity {
     @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
     private List<Stock> stocks = new LinkedList<>();
 
+    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
+    private List<Supplie> supplies = new LinkedList<>();
     public String getName() {
         return name;
     }
