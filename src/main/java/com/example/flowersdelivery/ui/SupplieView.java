@@ -2,7 +2,6 @@ package com.example.flowersdelivery.ui;
 
 
 import com.example.flowersdelivery.backend.entity.Flower;
-import com.example.flowersdelivery.backend.entity.Stock;
 import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.entity.Supplie;
 import com.example.flowersdelivery.backend.service.FlowerService;
@@ -16,13 +15,13 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "supplies", layout = MainLayout.class)
 @PageTitle("Поставки")
-public class SuppliesView extends VerticalLayout {
+public class SupplieView extends VerticalLayout {
     Grid<Supplie> supplieGrid = new Grid<>(Supplie.class);
     private SupplieService supplieService;
     private StoreService storeService;
     private FlowerService flowerService;
 
-    public SuppliesView(
+    public SupplieView(
             SupplieService supplieService,
             StoreService storeService,
             FlowerService flowerService
@@ -70,6 +69,7 @@ public class SuppliesView extends VerticalLayout {
         }).setHeader("Цвет");
         supplieGrid.addColumn(Supplie::getQuantity).setHeader("Количество");
         supplieGrid.addColumn(Supplie::getPrice).setHeader("Цена");
+        supplieGrid.addColumn(Supplie::getSupplyDate).setHeader("Дата поставки");
 
         supplieGrid.getColumns().forEach(col -> col.setAutoWidth(true));
     }

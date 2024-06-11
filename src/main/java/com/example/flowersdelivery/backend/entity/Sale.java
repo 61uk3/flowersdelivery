@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "supplies")
-public class Supplie extends AbstractEntity {
+@Table(name = "sales")
+public class Sale extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
@@ -21,12 +21,12 @@ public class Supplie extends AbstractEntity {
     private int quantity;
 
     @NotNull
-    @Column(name = "price")
-    private int price;
+    @Column(name = "sale_date")
+    private Date saleDate;
 
     @NotNull
-    @Column(name = "supply_date")
-    private Date supplyDate;
+    @Column(name = "delivery_address")
+    private String deliveryAddress;
 
     public Store getStore() {
         return store;
@@ -52,19 +52,19 @@ public class Supplie extends AbstractEntity {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
-        return price;
+    public String getSaleDate() {
+        return saleDate.toString().substring(0, 10);
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setSaleDate(Date saleDate) {
+        this.saleDate = saleDate;
     }
 
-    public String getSupplyDate() {
-        return supplyDate.toString().substring(0, 10);
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    public void setSupplyDate(Date supplyDate) {
-        this.supplyDate = supplyDate;
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 }
