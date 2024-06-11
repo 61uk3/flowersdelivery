@@ -37,8 +37,8 @@ public class MainLayout extends AppLayout {
     private void drawer() {
         addToDrawer(new VerticalLayout(
                 new RouterLink("Наличие", FlowerView.class),
-                new RouterLink("Поставки", SuppliesView.class),
-                new RouterLink("Продажи", FlowerView.class)
+                new RouterLink("Поставки", SupplieView.class),
+                new RouterLink("Продажи", SaleView.class)
         ));
     }
 
