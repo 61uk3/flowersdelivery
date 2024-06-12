@@ -1,8 +1,10 @@
 package com.example.flowersdelivery.ui;
 
+import com.example.flowersdelivery.ui.view.FlowerView;
+import com.example.flowersdelivery.ui.view.SaleView;
+import com.example.flowersdelivery.ui.view.SupplieView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

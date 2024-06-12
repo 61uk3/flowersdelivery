@@ -1,4 +1,4 @@
-package com.example.flowersdelivery.ui;
+package com.example.flowersdelivery.ui.view;
 
 import com.example.flowersdelivery.backend.entity.Flower;
 import com.example.flowersdelivery.backend.entity.Sale;
@@ -7,6 +7,8 @@ import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.SaleService;
 import com.example.flowersdelivery.backend.service.StoreService;
+import com.example.flowersdelivery.ui.MainLayout;
+import com.example.flowersdelivery.ui.form.SaleForm;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,7 +18,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "sale", layout = MainLayout.class)
 @PageTitle("Доставка")
 public class SaleView extends VerticalLayout {
-    
+    private SaleForm saleForm;
     Grid<Sale> saleGrid = new Grid<>(Sale.class);
     private SaleService saleService;
     private FlowerService flowerService;
@@ -34,7 +36,9 @@ public class SaleView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
-        Div content = new Div(saleGrid);
+        saleForm = new SaleForm(flowerService.findAll(), storeService.findAll());
+
+        Div content = new Div(saleGrid, saleForm);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -77,5 +81,11 @@ public class SaleView extends VerticalLayout {
         saleGrid.addColumn(Sale::getDeliveryAddress).setHeader("Адрес доставки");
 
         saleGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        saleGrid.asSingleSelect().addValueChangeListener(e -> editSale(e.getValue()));
+    }
+
+    private void editSale(Sale sale) {
+        saleForm.setSale(sale);
     }
 }

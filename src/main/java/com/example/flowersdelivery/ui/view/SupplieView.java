@@ -1,4 +1,4 @@
-package com.example.flowersdelivery.ui;
+package com.example.flowersdelivery.ui.view;
 
 
 import com.example.flowersdelivery.backend.entity.Flower;
@@ -7,6 +7,8 @@ import com.example.flowersdelivery.backend.entity.Supplie;
 import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.StoreService;
 import com.example.flowersdelivery.backend.service.SupplieService;
+import com.example.flowersdelivery.ui.MainLayout;
+import com.example.flowersdelivery.ui.form.SupplieForm;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,6 +18,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "supplies", layout = MainLayout.class)
 @PageTitle("Поставки")
 public class SupplieView extends VerticalLayout {
+    private SupplieForm supplieForm;
     Grid<Supplie> supplieGrid = new Grid<>(Supplie.class);
     private SupplieService supplieService;
     private StoreService storeService;
@@ -33,7 +36,9 @@ public class SupplieView extends VerticalLayout {
         setSizeFull();
         configureGrid();
 
-        Div content = new Div(supplieGrid);
+        supplieForm = new SupplieForm(flowerService.findAll(), storeService.findAll());
+
+        Div content = new Div(supplieGrid, supplieForm);
         content.addClassName("content");
         content.setSizeFull();
 
@@ -72,5 +77,11 @@ public class SupplieView extends VerticalLayout {
         supplieGrid.addColumn(Supplie::getSupplyDate).setHeader("Дата поставки");
 
         supplieGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        supplieGrid.asSingleSelect().addValueChangeListener(e -> editSupplie(e.getValue()));
+    }
+
+    private void editSupplie(Supplie supplie) {
+        supplieForm.setSupplie(supplie);
     }
 }

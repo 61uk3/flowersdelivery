@@ -37,4 +37,8 @@ public class Store extends AbstractEntity {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getNameWithAddress() {
+        return name + " | " + address;
+    }
 }
