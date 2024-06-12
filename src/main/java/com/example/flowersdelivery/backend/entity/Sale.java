@@ -3,7 +3,11 @@ package com.example.flowersdelivery.backend.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Entity
 @Table(name = "sales")
@@ -52,8 +56,14 @@ public class Sale extends AbstractEntity {
         this.quantity = quantity;
     }
 
-    public String getSaleDate() {
-        return saleDate.toString().substring(0, 10);
+    public Date getSaleDate() {
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            return newDateFormat.parse(newDateFormat.format(saleDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void setSaleDate(Date saleDate) {

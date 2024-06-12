@@ -1,4 +1,4 @@
-package com.example.flowersdelivery.ui;
+package com.example.flowersdelivery.ui.view;
 
 import com.example.flowersdelivery.backend.entity.Flower;
 import com.example.flowersdelivery.backend.entity.Stock;
@@ -6,6 +6,9 @@ import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.StockService;
 import com.example.flowersdelivery.backend.service.StoreService;
+import com.example.flowersdelivery.ui.form.FlowerBook;
+import com.example.flowersdelivery.ui.MainLayout;
+import com.example.flowersdelivery.ui.form.FlowerForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -15,11 +18,13 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Наличие цветов")
-class FlowerView extends VerticalLayout {
+public class FlowerView extends VerticalLayout {
     private FlowerService flowerService;
     private StoreService storeService;
     private StockService stockService;
-    FlowerBook flowerBook;
+    private FlowerBook flowerBook;
+
+    private FlowerForm flowerForm;
     Button openFlowerBookBtn = new Button("Справочник");
     Grid<Stock> flowerGrid = new Grid<>(Stock.class);
 
@@ -34,17 +39,23 @@ class FlowerView extends VerticalLayout {
         this.stockService = stockService;
 
         flowerBook = new FlowerBook(flowerService);
-
         openFlowerBookBtn.addClickListener(e -> flowerBook.open());
+
+        flowerForm = new FlowerForm(storeService.findAll(), flowerService.findAll());
+
         addClassName("flower-view");
         setSizeFull();
         configureGrid();
 
-        Div content = new Div(flowerGrid);
+        Div content = new Div(flowerGrid, flowerForm);
         content.addClassName("content");
         content.setSizeFull();
 
         add(openFlowerBookBtn, content);
+        updateListFlower(stockService);
+    }
+
+    private void updateListFlower(StockService stockService) {
         flowerGrid.setItems(stockService.findAll());
     }
 
@@ -79,5 +90,11 @@ class FlowerView extends VerticalLayout {
         flowerGrid.addColumn(Stock::getQuantity).setHeader("Количество");
 
         flowerGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        flowerGrid.asSingleSelect().addValueChangeListener(e -> editFlower(e.getValue()));
+    }
+
+    private void editFlower(Stock stock) {
+        flowerForm.setFlower(stock);
     }
 }
