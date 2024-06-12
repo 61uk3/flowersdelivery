@@ -24,7 +24,7 @@ public class SupplieForm extends FormLayout {
     ComboBox<Store> store = new ComboBox<>("Магазин");
     IntegerField quantity = new IntegerField("Количество");
     NumberField price = new NumberField("Цена");
-    DatePicker supplyDate = new DatePicker("Дата поствки");
+    DatePicker supplyDate = new DatePicker("Дата поставки");
     Button save = new Button("Сохранить");
     Button delete = new Button("Удалить");
     Button close = new Button("Отмена");
