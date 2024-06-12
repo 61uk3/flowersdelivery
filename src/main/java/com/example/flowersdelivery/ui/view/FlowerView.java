@@ -9,9 +9,11 @@ import com.example.flowersdelivery.backend.service.StoreService;
 import com.example.flowersdelivery.ui.form.FlowerBook;
 import com.example.flowersdelivery.ui.MainLayout;
 import com.example.flowersdelivery.ui.form.FlowerForm;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -25,7 +27,6 @@ public class FlowerView extends VerticalLayout {
     private FlowerBook flowerBook;
 
     private FlowerForm flowerForm;
-    Button openFlowerBookBtn = new Button("Справочник");
     Grid<Stock> flowerGrid = new Grid<>(Stock.class);
 
 
@@ -39,9 +40,9 @@ public class FlowerView extends VerticalLayout {
         this.stockService = stockService;
 
         flowerBook = new FlowerBook(flowerService);
-        openFlowerBookBtn.addClickListener(e -> flowerBook.open());
 
         flowerForm = new FlowerForm(storeService.findAll(), flowerService.findAll());
+
 
         addClassName("flower-view");
         setSizeFull();
@@ -51,8 +52,28 @@ public class FlowerView extends VerticalLayout {
         content.addClassName("content");
         content.setSizeFull();
 
-        add(openFlowerBookBtn, content);
+        add(toolBar(), content);
         updateListFlower(stockService);
+        closeEditor();
+    }
+
+    private HorizontalLayout toolBar() {
+        Button openFlowerBookBtn = new Button("Справочник", click -> flowerBook.open());
+        Button addFlowerBtn = new Button("Добавить", click -> addFlower());
+
+        HorizontalLayout toolBar = new HorizontalLayout(openFlowerBookBtn, addFlowerBtn);
+        return toolBar;
+    }
+
+    private void addFlower() {
+        flowerGrid.asSingleSelect().getValue();
+        editFlower(new Stock());
+    }
+
+    private void closeEditor() {
+        flowerForm.setFlower(null);
+        flowerForm.setVisible(false);
+        removeClassName("editing");
     }
 
     private void updateListFlower(StockService stockService) {
@@ -95,6 +116,13 @@ public class FlowerView extends VerticalLayout {
     }
 
     private void editFlower(Stock stock) {
-        flowerForm.setFlower(stock);
+        if (stock == null) {
+            closeEditor();
+        } else {
+            flowerForm.setFlower(stock);
+            flowerForm.setVisible(true);
+            addClassName("editing");
+        }
+
     }
 }
