@@ -26,7 +26,7 @@ public class Sale extends AbstractEntity {
 
     @NotNull
     @Column(name = "sale_date")
-    private Date saleDate;
+    private Date saleDate = new Date();
 
     @NotNull
     @Column(name = "delivery_address")

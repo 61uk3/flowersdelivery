@@ -9,8 +9,10 @@ import com.example.flowersdelivery.backend.service.StoreService;
 import com.example.flowersdelivery.backend.service.SupplieService;
 import com.example.flowersdelivery.ui.MainLayout;
 import com.example.flowersdelivery.ui.form.SupplieForm;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -42,7 +44,24 @@ public class SupplieView extends VerticalLayout {
         content.addClassName("content");
         content.setSizeFull();
 
-        add(content);
+        add(toolBar(), content);
+        updateListSupplie(supplieService);
+        closeEditor();
+    }
+
+    private HorizontalLayout toolBar() {
+        Button addSupplieBtn = new Button("Добавить", click -> addSupplie());
+
+        HorizontalLayout toolBar = new HorizontalLayout(addSupplieBtn);
+        return toolBar;
+    }
+
+    private void addSupplie() {
+        supplieGrid.asSingleSelect().getValue();
+        editSupplie(new Supplie());
+    }
+
+    private void updateListSupplie(SupplieService supplieService) {
         supplieGrid.setItems(supplieService.findAll());
     }
 
@@ -82,6 +101,17 @@ public class SupplieView extends VerticalLayout {
     }
 
     private void editSupplie(Supplie supplie) {
-        supplieForm.setSupplie(supplie);
+        if (supplie == null) {
+            closeEditor();
+        } else {
+            supplieForm.setSupplie(supplie);
+            supplieForm.setVisible(true);
+            addClassName("editing");
+        }
+    }
+    private void closeEditor() {
+        supplieForm.setSupplie(null);
+        supplieForm.setVisible(false);
+        removeClassName("editing");
     }
 }

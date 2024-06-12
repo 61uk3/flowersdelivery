@@ -9,8 +9,10 @@ import com.example.flowersdelivery.backend.service.SaleService;
 import com.example.flowersdelivery.backend.service.StoreService;
 import com.example.flowersdelivery.ui.MainLayout;
 import com.example.flowersdelivery.ui.form.SaleForm;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -32,7 +34,7 @@ public class SaleView extends VerticalLayout {
         this.saleService = saleService;
         this.flowerService = flowerService;
         this.storeService = storeService;
-        addClassName("flower-view");
+        addClassName("sale-view");
         setSizeFull();
         configureGrid();
 
@@ -42,7 +44,23 @@ public class SaleView extends VerticalLayout {
         content.addClassName("content");
         content.setSizeFull();
 
-        add(content);
+        add(toolBar(), content);
+        updateListSale(saleService);
+        closeEditor();
+    }
+    private HorizontalLayout toolBar() {
+        Button addSaleBtn = new Button("Добавить", click -> addSale());
+
+        HorizontalLayout toolBar = new HorizontalLayout(addSaleBtn);
+        return toolBar;
+    }
+
+    private void addSale() {
+        saleGrid.asSingleSelect().getValue();
+        editSale(new Sale());
+    }
+
+    private void updateListSale(SaleService saleService) {
         saleGrid.setItems(saleService.findAll());
     }
 
@@ -85,7 +103,20 @@ public class SaleView extends VerticalLayout {
         saleGrid.asSingleSelect().addValueChangeListener(e -> editSale(e.getValue()));
     }
 
+    private void closeEditor() {
+        saleForm.setSale(null);
+        saleForm.setVisible(false);
+        removeClassName("editing");
+    }
+
     private void editSale(Sale sale) {
-        saleForm.setSale(sale);
+        if (sale == null) {
+            closeEditor();
+        } else {
+            saleForm.setSale(sale);
+            saleForm.setVisible(true);
+            addClassName("editing");
+        }
+
     }
 }

@@ -29,7 +29,7 @@ public class Supplie extends AbstractEntity {
 
     @NotNull
     @Column(name = "supply_date")
-    private Date supplyDate;
+    private Date supplyDate = new Date();
 
     public Store getStore() {
         return store;
