@@ -42,15 +42,31 @@ public class SaleView extends VerticalLayout {
         configureGrid();
 
         saleForm = new SaleForm(flowerService.findAll(), storeService.findAll());
+        saleForm.addSaveListener(this::saveContact);
+        saleForm.addDeleteListener(this::deleteContact);
+        saleForm.addCloseListener(e -> closeEditor());
 
         Div content = new Div(saleGrid, saleForm);
         content.addClassName("content");
         content.setSizeFull();
 
         add(toolBar(), content);
-        updateListSale(saleService);
+        updateListSale();
         closeEditor();
     }
+
+    private void deleteContact(SaleForm.DeleteEvent deleteEvent) {
+        saleService.delete(deleteEvent.getSale());
+        updateListSale();
+        closeEditor();
+    }
+
+    private void saveContact(SaleForm.SaveEvent saveEvent) {
+        saleService.save(saveEvent.getSale());
+        updateListSale();
+        closeEditor();
+    }
+
     private HorizontalLayout toolBar() {
         Button addSaleBtn = new Button("Добавить", click -> addSale());
 
@@ -63,7 +79,7 @@ public class SaleView extends VerticalLayout {
         editSale(new Sale());
     }
 
-    private void updateListSale(SaleService saleService) {
+    private void updateListSale() {
         saleGrid.setItems(saleService.findAll());
     }
 

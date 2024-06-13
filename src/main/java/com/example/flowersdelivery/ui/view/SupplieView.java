@@ -42,13 +42,28 @@ public class SupplieView extends VerticalLayout {
         configureGrid();
 
         supplieForm = new SupplieForm(flowerService.findAll(), storeService.findAll());
+        supplieForm.addSaveListener(this::saveContact);
+        supplieForm.addDeleteListener(this::deleteContact);
+        supplieForm.addCloseListener(e -> closeEditor());
 
         Div content = new Div(supplieGrid, supplieForm);
         content.addClassName("content");
         content.setSizeFull();
 
         add(toolBar(), content);
-        updateListSupplie(supplieService);
+        updateListSupplie();
+        closeEditor();
+    }
+
+    private void deleteContact(SupplieForm.DeleteEvent deleteEvent) {
+        supplieService.delete(deleteEvent.getSupplie());
+        updateListSupplie();
+        closeEditor();
+    }
+
+    private void saveContact(SupplieForm.SaveEvent saveEvent) {
+        supplieService.save(saveEvent.getSupplie());
+        updateListSupplie();
         closeEditor();
     }
 
@@ -64,7 +79,7 @@ public class SupplieView extends VerticalLayout {
         editSupplie(new Supplie());
     }
 
-    private void updateListSupplie(SupplieService supplieService) {
+    private void updateListSupplie() {
         supplieGrid.setItems(supplieService.findAll());
     }
 

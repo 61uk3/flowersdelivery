@@ -17,4 +17,14 @@ public class SupplieService {
     public List<Supplie> findAll() {
         return supplieRepository.findAll();
     }
+
+    public void save(Supplie supplie) {
+        if (supplie == null) {
+            return;
+        }
+        supplieRepository.save(supplie);
+    }
+    public void delete(Supplie supplie) {
+        supplieRepository.delete(supplie);
+    }
 }
