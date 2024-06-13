@@ -32,6 +32,10 @@ public class Sale extends AbstractEntity {
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
+    @NotNull
+    @Column(name = "price")
+    private double flowerPrice = 0.0d;
+
     public Store getStore() {
         return store;
     }
@@ -78,5 +82,13 @@ public class Sale extends AbstractEntity {
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
+    }
+
+    public double getFlowerPrice() {
+        return flowerPrice;
+    }
+
+    public void setFlowerPrice(double flowerPrice) {
+        this.flowerPrice = flowerPrice;
     }
 }

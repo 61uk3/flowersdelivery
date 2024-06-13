@@ -76,6 +76,7 @@ public class SaleView extends VerticalLayout {
         saleGrid.removeColumnByKey("id");
         saleGrid.removeColumnByKey("saleDate");
         saleGrid.removeColumnByKey("deliveryAddress");
+        saleGrid.removeColumnByKey("flowerPrice");
 
         saleGrid.addColumn(sale -> {
             Store store = sale.getStore();
@@ -93,10 +94,7 @@ public class SaleView extends VerticalLayout {
             Flower flower = sale.getFlower();
             return flower == null ? "-" : flower.getFlowerColor();
         }).setHeader("Цвет");
-        saleGrid.addColumn(sale -> {
-            Flower flower = sale.getFlower();
-            return flower == null ? "-" : flower.getFlowerPrice();
-        }).setHeader("Цена");
+        saleGrid.addColumn(Sale::getFlowerPrice).setHeader("Цена");
         saleGrid.addColumn(Sale::getQuantity).setHeader("Количество");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         saleGrid.addColumn(sale -> {

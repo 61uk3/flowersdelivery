@@ -34,7 +34,6 @@ public class FlowerBook extends Dialog {
         flowerGrid.removeColumnByKey("id");
         flowerGrid.removeColumnByKey("flowerName");
         flowerGrid.removeColumnByKey("flowerColor");
-        flowerGrid.removeColumnByKey("flowerPrice");
 
         flowerGrid.addColumn(Flower::getFlowerName).setHeader("Цветок");
         flowerGrid.addColumn(Flower::getFlowerColor).setHeader("Цвет");

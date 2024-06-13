@@ -12,6 +12,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
@@ -38,7 +39,7 @@ public class SaleForm extends FormLayout {
         store.setItems(stores);
         store.setItemLabelGenerator(Store::getNameWithAddress);
         flower.setItems(flowers);
-        flower.setItemLabelGenerator(Flower::getNameColorPrice);
+        flower.setItemLabelGenerator(Flower::getNameColor);
 
         add(
                 store,

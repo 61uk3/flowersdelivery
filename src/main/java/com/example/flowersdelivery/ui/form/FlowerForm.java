@@ -24,6 +24,7 @@ import java.util.List;
 public class FlowerForm extends FormLayout {
     ComboBox<Flower> flower = new ComboBox<>("Цветок");
     IntegerField quantity = new IntegerField("Количество");
+    NumberField flowerPrice = new NumberField("Цена");
     ComboBox<Store> store = new ComboBox<>("Магазин");
 
     Button save = new Button("Сохранить");
@@ -38,13 +39,14 @@ public class FlowerForm extends FormLayout {
         binder.bindInstanceFields(this);
 
         flower.setItems(flowers);
-        flower.setItemLabelGenerator(Flower::getNameColorPrice);
+        flower.setItemLabelGenerator(Flower::getNameColor);
         store.setItems(stores);
         store.setItemLabelGenerator(Store::getNameWithAddress);
 
         add(
                 flower,
                 quantity,
+                flowerPrice,
                 store,
                 buttonLayout()
         );

@@ -101,6 +101,7 @@ public class FlowerView extends VerticalLayout {
         flowerGrid.removeColumnByKey("store");
         flowerGrid.removeColumnByKey("quantity");
         flowerGrid.removeColumnByKey("id");
+        flowerGrid.removeColumnByKey("flowerPrice");
 
         flowerGrid.addColumn(stock -> {
             Flower flower = stock.getFlower();
@@ -110,10 +111,7 @@ public class FlowerView extends VerticalLayout {
             Flower flower = stock.getFlower();
             return flower == null ? "-" : flower.getFlowerColor();
         }).setHeader("Цвет");
-        flowerGrid.addColumn(stock -> {
-            Flower flower = stock.getFlower();
-            return flower == null ? "-" : flower.getFlowerPrice();
-        }).setHeader("Цена");
+        flowerGrid.addColumn(Stock::getFlowerPrice).setHeader("Цена");
         flowerGrid.addColumn(stock -> {
             Store store = stock.getStore();
             return store == null ? "-" : store.getName();
