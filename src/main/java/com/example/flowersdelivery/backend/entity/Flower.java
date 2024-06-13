@@ -17,10 +17,6 @@ public class Flower extends AbstractEntity {
     @Column(name = "color")
     private String flowerColor = "";
 
-    @NotNull
-    @Column(name = "price")
-    private double flowerPrice = 0.0d;
-
     @OneToMany(mappedBy = "flower", fetch = FetchType.EAGER)
     private List<Stock> stocks = new LinkedList<>();
 
@@ -41,18 +37,6 @@ public class Flower extends AbstractEntity {
 
     public void setFlowerColor(String flowerColor) {
         this.flowerColor = flowerColor;
-    }
-
-    public double getFlowerPrice() {
-        return flowerPrice;
-    }
-
-    public void setFlowerPrice(double flowerPrice) {
-        this.flowerPrice = flowerPrice;
-    }
-
-    public String getNameColorPrice() {
-        return flowerName + " | " + flowerColor + " | " + flowerPrice;
     }
 
     public String getNameColor() {

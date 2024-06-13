@@ -17,6 +17,9 @@ public class Stock extends AbstractEntity {
     @NotNull
     @Column(name = "quantity")
     private int quantity;
+    @NotNull
+    @Column(name = "price")
+    private double flowerPrice = 0.0d;
 
     public Store getStore() {
         return store;
@@ -40,5 +43,13 @@ public class Stock extends AbstractEntity {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getFlowerPrice() {
+        return flowerPrice;
+    }
+
+    public void setFlowerPrice(double flowerPrice) {
+        this.flowerPrice = flowerPrice;
     }
 }
