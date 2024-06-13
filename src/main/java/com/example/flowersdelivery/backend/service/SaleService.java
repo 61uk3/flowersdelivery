@@ -18,4 +18,15 @@ public class SaleService {
     public List<Sale> findAll() {
         return saleRepository.findAll();
     }
+
+    public void save(Sale sale) {
+        if (sale == null) {
+            return;
+        }
+        saleRepository.save(sale);
+    }
+
+    public void delete(Sale sale) {
+        saleRepository.delete(sale);
+    }
 }
