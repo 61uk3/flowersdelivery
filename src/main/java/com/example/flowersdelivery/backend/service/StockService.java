@@ -16,4 +16,15 @@ public class StockService {
     public List<Stock> findAll() {
         return stockRepository.findAll();
     }
+
+    public void save(Stock stock) {
+        if (stock == null) {
+            return;
+        }
+        stockRepository.save(stock);
+    }
+
+    public void delete(Stock stock) {
+        stockRepository.delete(stock);
+    }
 }
