@@ -42,7 +42,9 @@ public class FlowerView extends VerticalLayout {
         flowerBook = new FlowerBook(flowerService);
 
         flowerForm = new FlowerForm(storeService.findAll(), flowerService.findAll());
-
+        flowerForm.addSaveListener(this::saveFlower);
+        flowerForm.addDeleteListener(this::deleteFlower);
+        flowerForm.addCloseListener(e -> closeEditor());
 
         addClassName("flower-view");
         setSizeFull();
@@ -53,7 +55,19 @@ public class FlowerView extends VerticalLayout {
         content.setSizeFull();
 
         add(toolBar(), content);
-        updateListFlower(stockService);
+        updateListFlower();
+        closeEditor();
+    }
+
+    private void deleteFlower(FlowerForm.DeleteEvent deleteEvent) {
+        stockService.delete(deleteEvent.getStock());
+        updateListFlower();
+        closeEditor();
+    }
+
+    private void saveFlower(FlowerForm.SaveEvent saveEvent) {
+        stockService.save(saveEvent.getStock());
+        updateListFlower();
         closeEditor();
     }
 
@@ -76,7 +90,7 @@ public class FlowerView extends VerticalLayout {
         removeClassName("editing");
     }
 
-    private void updateListFlower(StockService stockService) {
+    private void updateListFlower() {
         flowerGrid.setItems(stockService.findAll());
     }
 

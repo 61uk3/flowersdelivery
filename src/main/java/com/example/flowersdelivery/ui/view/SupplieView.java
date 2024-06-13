@@ -17,6 +17,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Route(value = "supplies", layout = MainLayout.class)
 @PageTitle("Поставки")
 public class SupplieView extends VerticalLayout {
@@ -93,7 +96,11 @@ public class SupplieView extends VerticalLayout {
         }).setHeader("Цвет");
         supplieGrid.addColumn(Supplie::getQuantity).setHeader("Количество");
         supplieGrid.addColumn(Supplie::getPrice).setHeader("Цена");
-        supplieGrid.addColumn(Supplie::getSupplyDate).setHeader("Дата поставки");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        supplieGrid.addColumn(supplie -> {
+            Date supplieDate = supplie.getSupplyDate();
+            return supplieDate == null ? "-" : dateFormat.format(supplieDate);
+        }).setHeader("Дата поставки");
 
         supplieGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 

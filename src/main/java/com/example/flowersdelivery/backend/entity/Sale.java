@@ -59,7 +59,9 @@ public class Sale extends AbstractEntity {
     public Date getSaleDate() {
         SimpleDateFormat newDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         try {
-            return newDateFormat.parse(newDateFormat.format(saleDate));
+            String formattedDate = newDateFormat.format(saleDate);
+            Date parseDate = newDateFormat.parse(formattedDate);
+            return parseDate;
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
