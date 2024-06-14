@@ -6,11 +6,14 @@ import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.StockService;
 import com.example.flowersdelivery.backend.service.StoreService;
-import com.example.flowersdelivery.ui.form.FlowerBook;
 import com.example.flowersdelivery.ui.MainLayout;
+import com.example.flowersdelivery.ui.form.FlowerBook;
 import com.example.flowersdelivery.ui.form.FlowerForm;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -21,14 +24,13 @@ import com.vaadin.flow.router.Route;
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Наличие цветов")
 public class FlowerView extends VerticalLayout {
+    private Dialog flowerBook = new Dialog();
     private FlowerService flowerService;
     private StoreService storeService;
     private StockService stockService;
-    private FlowerBook flowerBook;
 
     private FlowerForm flowerForm;
-    Grid<Stock> flowerGrid = new Grid<>(Stock.class);
-
+    private Grid<Stock> flowerGrid = new Grid<>(Stock.class);
 
     FlowerView(
             FlowerService flowerService,
@@ -39,12 +41,14 @@ public class FlowerView extends VerticalLayout {
         this.storeService = storeService;
         this.stockService = stockService;
 
-        flowerBook = new FlowerBook(flowerService);
-
         flowerForm = new FlowerForm(storeService.findAll(), flowerService.findAll());
         flowerForm.addSaveListener(this::saveFlower);
         flowerForm.addDeleteListener(this::deleteFlower);
         flowerForm.addCloseListener(e -> closeEditor());
+
+        configureFlowerBook();
+        flowerBook.add(new FlowerBook(flowerService));
+        flowerBook.addDialogCloseActionListener(e -> updateListFlowerAndCloseDialog());
 
         addClassName("flower-view");
         setSizeFull();
@@ -57,6 +61,11 @@ public class FlowerView extends VerticalLayout {
         add(toolBar(), content);
         updateListFlower();
         closeEditor();
+    }
+
+    private void configureFlowerBook() {
+        flowerBook.setWidth("70%");
+        flowerBook.setHeight("60%");
     }
 
     private void deleteFlower(FlowerForm.DeleteEvent deleteEvent) {
@@ -75,23 +84,15 @@ public class FlowerView extends VerticalLayout {
         Button openFlowerBookBtn = new Button("Справочник", click -> flowerBook.open());
         Button addFlowerBtn = new Button("Добавить", click -> addFlower());
 
-        HorizontalLayout toolBar = new HorizontalLayout(openFlowerBookBtn, addFlowerBtn);
-        return toolBar;
-    }
-
-    private void addFlower() {
-        flowerGrid.asSingleSelect().getValue();
-        editFlower(new Stock());
-    }
-
-    private void closeEditor() {
-        flowerForm.setFlower(null);
-        flowerForm.setVisible(false);
-        removeClassName("editing");
+        return new HorizontalLayout(openFlowerBookBtn, addFlowerBtn);
     }
 
     private void updateListFlower() {
         flowerGrid.setItems(stockService.findAll());
+    }
+    private void updateListFlowerAndCloseDialog() {
+        UI.getCurrent().getPage().reload();
+        flowerBook.close();
     }
 
     private void configureGrid() {
@@ -127,6 +128,11 @@ public class FlowerView extends VerticalLayout {
         flowerGrid.asSingleSelect().addValueChangeListener(e -> editFlower(e.getValue()));
     }
 
+    private void addFlower() {
+        flowerGrid.asSingleSelect().getValue();
+        editFlower(new Stock());
+    }
+
     private void editFlower(Stock stock) {
         if (stock == null) {
             closeEditor();
@@ -135,6 +141,11 @@ public class FlowerView extends VerticalLayout {
             flowerForm.setVisible(true);
             addClassName("editing");
         }
+    }
 
+    private void closeEditor() {
+        flowerForm.setFlower(null);
+        flowerForm.setVisible(false);
+        removeClassName("editing");
     }
 }

@@ -5,44 +5,71 @@ import com.example.flowersdelivery.backend.service.FlowerService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
 @Component
 @UIScope
-public class FlowerBook extends Dialog {
+public class FlowerBook extends VerticalLayout {
+    Dialog flowerBookDialog = new Dialog();
     FlowerBookForm flowerBookForm;
-    Button addFlowBtn = new Button("Добавить");
-    private FlowerService flowerService;
+    Button addFlower = new Button("Добавить");
     Grid<Flower> flowerGrid = new Grid<>(Flower.class);
+    private FlowerService flowerService;
 
     public FlowerBook(FlowerService flowerService) {
         this.flowerService = flowerService;
-        flowerBookForm = new FlowerBookForm();
-        addClassName("flower-dialog");
-        setWidth("50%");
-        setHeight("70%");
+        addClassName("flower-book");
+        configureFlowerGrid();
 
-        configureGrid();
-        add(addFlowBtn, flowerGrid);
+        flowerBookForm = new FlowerBookForm();
+        flowerBookForm.addSaveListener(this::saveFlower);
+        flowerBookForm.addCloseListener(e -> closeEditor());
+
+        flowerBookDialog.add(flowerBookForm);
+
+        addFlower.addClickListener(event -> addNewFlower());
+
+        add(addFlower, flowerGrid);
+        updateFlowerGrid();
+    }
+
+    private void updateFlowerGrid() {
         flowerGrid.setItems(flowerService.findAll());
     }
 
-    private void configureGrid() {
-        flowerGrid.addClassName("flower-book-grid");
-        flowerGrid.setSizeFull();
+    private void saveFlower(FlowerBookForm.SaveEvent saveEvent) {
+        flowerService.save(saveEvent.getFlower());
+        updateFlowerGrid();
+        closeEditor();
+    }
+
+    private void closeEditor() {
+        flowerBookDialog.close();
+    }
+
+    private void configureFlowerGrid() {
+        addClassName("flower-book-grid");
         flowerGrid.removeColumnByKey("id");
         flowerGrid.removeColumnByKey("flowerName");
         flowerGrid.removeColumnByKey("flowerColor");
+        flowerGrid.removeColumnByKey("nameColor");
 
         flowerGrid.addColumn(Flower::getFlowerName).setHeader("Цветок");
         flowerGrid.addColumn(Flower::getFlowerColor).setHeader("Цвет");
 
-        flowerGrid.asSingleSelect().addValueChangeListener(e -> editFLower(e.getValue()));
+        flowerGrid.asSingleSelect().addValueChangeListener(e -> editFlower(e.getValue()));
     }
 
-    private void editFLower(Flower flower) {
+    private void editFlower(Flower flower) {
+        flowerGrid.asSingleSelect().clear();
         flowerBookForm.setFlower(flower);
-        flowerBookForm.open();
+        flowerBookDialog.open();
+    }
+
+    private void addNewFlower() {
+        flowerBookForm.setFlower(new Flower());
+        flowerBookDialog.open();
     }
 }
