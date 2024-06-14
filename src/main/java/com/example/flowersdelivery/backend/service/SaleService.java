@@ -3,6 +3,8 @@ package com.example.flowersdelivery.backend.service;
 import com.example.flowersdelivery.backend.DTOs.FlowerSalesDTO;
 import com.example.flowersdelivery.backend.entity.Flower;
 import com.example.flowersdelivery.backend.entity.Sale;
+import com.example.flowersdelivery.backend.entity.Stock;
+import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.repository.SaleRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,9 @@ public class SaleService {
         return results.stream()
                 .map(res -> new FlowerSalesDTO((Flower) res[0], (Long) res[1]))
                 .collect(Collectors.toList());
+    }
+
+    public List<Object[]> rotation() {
+        return saleRepository.rotation(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
     }
 }
