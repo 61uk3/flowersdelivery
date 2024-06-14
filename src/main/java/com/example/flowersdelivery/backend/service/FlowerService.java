@@ -17,4 +17,11 @@ public class FlowerService {
     public List<Flower> findAll() {
         return flowerRepository.findAll();
     }
+
+    public void save(Flower flower) {
+        if (flower == null) {
+            return;
+        }
+        flowerRepository.save(flower);
+    }
 }
