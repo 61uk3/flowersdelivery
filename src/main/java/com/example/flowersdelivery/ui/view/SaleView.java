@@ -8,8 +8,10 @@ import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.SaleService;
 import com.example.flowersdelivery.backend.service.StoreService;
 import com.example.flowersdelivery.ui.MainLayout;
+import com.example.flowersdelivery.ui.form.ReportsForm;
 import com.example.flowersdelivery.ui.form.SaleForm;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -23,6 +25,8 @@ import java.util.Date;
 @Route(value = "sale", layout = MainLayout.class)
 @PageTitle("Доставка")
 public class SaleView extends VerticalLayout {
+
+    private Dialog reportDialog;
     private SaleForm saleForm;
     Grid<Sale> saleGrid = new Grid<>(Sale.class);
     private SaleService saleService;
@@ -45,6 +49,8 @@ public class SaleView extends VerticalLayout {
         saleForm.addSaveListener(this::saveContact);
         saleForm.addDeleteListener(this::deleteContact);
         saleForm.addCloseListener(e -> closeEditor());
+
+        reportDialog = new Dialog(new ReportsForm(saleService, storeService));
 
         Div content = new Div(saleGrid, saleForm);
         content.addClassName("content");
@@ -69,8 +75,9 @@ public class SaleView extends VerticalLayout {
 
     private HorizontalLayout toolBar() {
         Button addSaleBtn = new Button("Добавить", click -> addSale());
+        Button reportBtn = new Button("Отчеты", click -> {reportDialog.open();});
 
-        HorizontalLayout toolBar = new HorizontalLayout(addSaleBtn);
+        HorizontalLayout toolBar = new HorizontalLayout(reportBtn, addSaleBtn);
         return toolBar;
     }
 

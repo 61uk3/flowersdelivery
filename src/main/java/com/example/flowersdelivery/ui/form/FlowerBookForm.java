@@ -37,7 +37,7 @@ public class FlowerBookForm extends FormLayout {
         binder.setBean(flower);
     }
 
-    private com.vaadin.flow.component.Component buttonLayout() {
+    private HorizontalLayout buttonLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
