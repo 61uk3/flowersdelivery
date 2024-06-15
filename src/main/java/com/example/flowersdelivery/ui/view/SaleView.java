@@ -18,10 +18,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@PermitAll
 @Route(value = "sale", layout = MainLayout.class)
 @PageTitle("Доставка")
 public class SaleView extends VerticalLayout {
