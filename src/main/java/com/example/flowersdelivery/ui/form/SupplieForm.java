@@ -31,6 +31,7 @@ public class SupplieForm extends FormLayout {
     Button save = new Button("Сохранить");
     Button delete = new Button("Удалить");
     Button close = new Button("Отмена");
+    Button accept = new Button("Принять");
     Binder<Supplie> binder = new BeanValidationBinder<>(Supplie.class);
 
     public SupplieForm(List<Flower> flowers,
@@ -68,10 +69,11 @@ public class SupplieForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(click -> validateAndSave());
+        accept.addClickListener(click -> fireEvent(new AcceptEvent(this, binder.getBean())));
         delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
-        return new HorizontalLayout(save, delete, close);
+        return new HorizontalLayout(save, accept, delete, close);
     }
 
     private void validateAndSave() {
@@ -94,7 +96,6 @@ public class SupplieForm extends FormLayout {
     }
 
     public static class SaveEvent extends SupplieFormEvent {
-
         public SaveEvent(SupplieForm source, Supplie supplie) {
             super(source, supplie);
         }
@@ -106,9 +107,14 @@ public class SupplieForm extends FormLayout {
             super(source, supplie);
         }
     }
+    public static class AcceptEvent extends SupplieFormEvent {
+
+        public AcceptEvent(SupplieForm source, Supplie supplie) {
+            super(source, supplie);
+        }
+    }
 
     public static class CloseEvent extends SupplieFormEvent {
-
         public CloseEvent(SupplieForm source) {
             super(source, null);
         }
@@ -122,5 +128,8 @@ public class SupplieForm extends FormLayout {
     }
     public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
         return addListener(CloseEvent.class, listener);
+    }
+    public Registration addAcceptListener(ComponentEventListener<AcceptEvent> listener) {
+        return addListener(AcceptEvent.class, listener);
     }
 }

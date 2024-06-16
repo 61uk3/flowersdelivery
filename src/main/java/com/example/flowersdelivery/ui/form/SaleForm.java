@@ -27,7 +27,6 @@ public class SaleForm extends FormLayout {
     ComboBox<Store> store = new ComboBox<>("Магазин");
     IntegerField quantity = new IntegerField("Количество");
     DatePicker saleDate = new DatePicker("Дата доставки");
-    TextField deliveryAddress = new TextField("Адрес доставки");
     Button save = new Button("Сохранить");
     Button delete = new Button("Удалить");
     Button close = new Button("Отмена");
@@ -49,7 +48,6 @@ public class SaleForm extends FormLayout {
                 flower,
                 quantity,
                 saleDate,
-                deliveryAddress,
                 buttonLayout()
         );
 

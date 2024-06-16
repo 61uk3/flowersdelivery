@@ -28,6 +28,7 @@ public class FlowerForm extends FormLayout {
     ComboBox<Store> store = new ComboBox<>("Магазин");
 
     Button save = new Button("Сохранить");
+    Button sale = new Button("Продать");
     Button delete = new Button("Удалить");
     Button close = new Button("Отмена");
 
@@ -65,10 +66,11 @@ public class FlowerForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(click -> validateAndSave());
+        sale.addClickListener(click -> fireEvent(new SaleEvent(this, binder.getBean())));
         delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
-        return new HorizontalLayout(save, delete, close);
+        return new HorizontalLayout(save, sale, delete, close);
     }
 
     private void validateAndSave() {
@@ -94,6 +96,11 @@ public class FlowerForm extends FormLayout {
             super(source, stock);
         }
     }
+    public static class SaleEvent extends FlowerFormEvent {
+        public SaleEvent(FlowerForm source, Stock stock) {
+            super(source, stock);
+        }
+    }
 
     public static class DeleteEvent extends FlowerFormEvent {
         public DeleteEvent(FlowerForm source, Stock stock) {
@@ -112,6 +119,9 @@ public class FlowerForm extends FormLayout {
 
     public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
         return addListener(SaveEvent.class, listener);
+    }
+    public Registration addSaleListener(ComponentEventListener<SaleEvent> listener) {
+        return addListener(SaleEvent.class, listener);
     }
     public Registration addCloseListener(ComponentEventListener<CloseEvent> listener) {
         return addListener(CloseEvent.class, listener);

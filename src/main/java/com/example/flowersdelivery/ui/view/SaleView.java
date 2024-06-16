@@ -2,7 +2,6 @@ package com.example.flowersdelivery.ui.view;
 
 import com.example.flowersdelivery.backend.entity.Flower;
 import com.example.flowersdelivery.backend.entity.Sale;
-import com.example.flowersdelivery.backend.entity.Stock;
 import com.example.flowersdelivery.backend.entity.Store;
 import com.example.flowersdelivery.backend.service.FlowerService;
 import com.example.flowersdelivery.backend.service.SaleService;
@@ -48,8 +47,8 @@ public class SaleView extends VerticalLayout {
         configureGrid();
 
         saleForm = new SaleForm(flowerService.findAll(), storeService.findAll());
-        saleForm.addSaveListener(this::saveContact);
-        saleForm.addDeleteListener(this::deleteContact);
+        saleForm.addSaveListener(this::saveSale);
+        saleForm.addDeleteListener(this::deleteSale);
         saleForm.addCloseListener(e -> closeEditor());
 
         reportDialog = new Dialog(new ReportsForm(saleService, storeService));
@@ -63,13 +62,13 @@ public class SaleView extends VerticalLayout {
         closeEditor();
     }
 
-    private void deleteContact(SaleForm.DeleteEvent deleteEvent) {
+    private void deleteSale(SaleForm.DeleteEvent deleteEvent) {
         saleService.delete(deleteEvent.getSale());
         updateListSale();
         closeEditor();
     }
 
-    private void saveContact(SaleForm.SaveEvent saveEvent) {
+    private void saveSale(SaleForm.SaveEvent saveEvent) {
         saleService.save(saveEvent.getSale());
         updateListSale();
         closeEditor();
@@ -100,7 +99,6 @@ public class SaleView extends VerticalLayout {
         saleGrid.removeColumnByKey("quantity");
         saleGrid.removeColumnByKey("id");
         saleGrid.removeColumnByKey("saleDate");
-        saleGrid.removeColumnByKey("deliveryAddress");
         saleGrid.removeColumnByKey("flowerPrice");
 
         saleGrid.addColumn(sale -> {
@@ -126,7 +124,6 @@ public class SaleView extends VerticalLayout {
             Date saleDate = sale.getSaleDate();
             return saleDate == null ? "-" : dateFormat.format(saleDate);
         }).setHeader("Дата");
-        saleGrid.addColumn(Sale::getDeliveryAddress).setHeader("Адрес доставки");
 
         saleGrid.getColumns().forEach(col -> col.setAutoWidth(true));
 
