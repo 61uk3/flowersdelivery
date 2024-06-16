@@ -53,6 +53,10 @@ public class FlowerForm extends FormLayout {
         );
     }
 
+    public int getQuantity() {
+        return quantity.getValue();
+    }
+
     public void setFlower(Stock stock) {
         binder.setBean(stock);
     }

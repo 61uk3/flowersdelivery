@@ -67,7 +67,7 @@ public class FlowerView extends VerticalLayout {
     }
 
     private void saleFlower(FlowerForm.SaleEvent saleEvent) {
-        stockService.sale(saleEvent.getStock().getId(), saleEvent.getStock().getQuantity());
+        stockService.sale(saleEvent.getStock().getId(), flowerForm.getQuantity());
         updateListFlower();
         closeEditor();
     }
