@@ -2,7 +2,6 @@ package com.example.flowersdelivery.backend.service;
 
 import com.example.flowersdelivery.backend.entity.Stock;
 import com.example.flowersdelivery.backend.entity.Supplie;
-import com.example.flowersdelivery.backend.repository.StockRepository;
 import com.example.flowersdelivery.backend.repository.SupplieRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
