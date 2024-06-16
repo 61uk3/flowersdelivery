@@ -45,6 +45,7 @@ public class FlowerView extends VerticalLayout {
 
         flowerForm = new FlowerForm(storeService.findAll(), flowerService.findAll());
         flowerForm.addSaveListener(this::saveFlower);
+        flowerForm.addSaleListener(this::saleFlower);
         flowerForm.addDeleteListener(this::deleteFlower);
         flowerForm.addCloseListener(e -> closeEditor());
 
@@ -61,6 +62,12 @@ public class FlowerView extends VerticalLayout {
         content.setSizeFull();
 
         add(toolBar(), content);
+        updateListFlower();
+        closeEditor();
+    }
+
+    private void saleFlower(FlowerForm.SaleEvent saleEvent) {
+        stockService.sale(saleEvent.getStock().getId(), saleEvent.getStock().getQuantity());
         updateListFlower();
         closeEditor();
     }

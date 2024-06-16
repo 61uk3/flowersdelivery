@@ -44,8 +44,9 @@ public class SupplieView extends VerticalLayout {
         configureGrid();
 
         supplieForm = new SupplieForm(flowerService.findAll(), storeService.findAll());
-        supplieForm.addSaveListener(this::saveContact);
-        supplieForm.addDeleteListener(this::deleteContact);
+        supplieForm.addSaveListener(this::saveSupplie);
+        supplieForm.addAcceptListener(this::acceptSupplie);
+        supplieForm.addDeleteListener(this::deleteSupplie);
         supplieForm.addCloseListener(e -> closeEditor());
 
         Div content = new Div(supplieGrid, supplieForm);
@@ -57,13 +58,19 @@ public class SupplieView extends VerticalLayout {
         closeEditor();
     }
 
-    private void deleteContact(SupplieForm.DeleteEvent deleteEvent) {
+    private void acceptSupplie(SupplieForm.AcceptEvent acceptEvent) {
+        supplieService.acceptDelivery(acceptEvent.getSupplie().getId());
+        updateListSupplie();
+        closeEditor();
+    }
+
+    private void deleteSupplie(SupplieForm.DeleteEvent deleteEvent) {
         supplieService.delete(deleteEvent.getSupplie());
         updateListSupplie();
         closeEditor();
     }
 
-    private void saveContact(SupplieForm.SaveEvent saveEvent) {
+    private void saveSupplie(SupplieForm.SaveEvent saveEvent) {
         supplieService.save(saveEvent.getSupplie());
         updateListSupplie();
         closeEditor();

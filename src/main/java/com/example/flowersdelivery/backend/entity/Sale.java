@@ -29,10 +29,6 @@ public class Sale extends AbstractEntity {
     private Date saleDate = new Date();
 
     @NotNull
-    @Column(name = "delivery_address")
-    private String deliveryAddress;
-
-    @NotNull
     @Column(name = "price")
     private double flowerPrice = 0.0d;
 
@@ -74,14 +70,6 @@ public class Sale extends AbstractEntity {
 
     public void setSaleDate(Date saleDate) {
         this.saleDate = saleDate;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
     }
 
     public double getFlowerPrice() {
