@@ -20,13 +20,17 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "ORDER BY totalQuantity DESC")
     List<Object[]> findTopFlower(@Param("store") Long id, @Param("startDate") Date startDate, Pageable pageable);
 
-    @Query("SELECT st.name, SUM(stock.flowerPrice / 2 * stock.quantity) AS totalSupPrice, " +
-            "(SUM(s.flowerPrice * s.quantity)/2) AS totalSalePrice, " +
-            "(SUM(s.flowerPrice * s.quantity) - SUM(stock.flowerPrice / 2 * stock.quantity)) AS difference " +
+
+    @Query("SELECT st.name, SUM(stock.flowerPrice / 2 * stock.quantity) AS totalSupPrice " +
+            "FROM Stock stock " +
+            "JOIN stock.store st " +
+            "GROUP BY st.name")
+    List<Object[]> getTotalSupPrice();
+
+    @Query("SELECT st.name, SUM(s.flowerPrice * s.quantity) AS totalSalePrice " +
             "FROM Sale s " +
             "JOIN s.store st " +
-            "JOIN Stock stock ON stock.store.id = st.id " +
             "WHERE s.saleDate >= :startDate " +
             "GROUP BY st.name")
-    List<Object[]> rotation(@Param("startDate") Date startDate);
+    List<Object[]> getTotalSalePrice(@Param("startDate") Date startDate);
 }

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +50,31 @@ public class SaleService {
                 .collect(Collectors.toList());
     }
 
-    public List<Object[]> rotation() {
-        return saleRepository.rotation(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+    public List<Map<String, Object>> rotation() {
+        List<Object[]> totalSupPrices = saleRepository.getTotalSupPrice();
+        List<Object[]> totalSalePrices = saleRepository.getTotalSalePrice(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        Map<String, Double> supPriceMap = new HashMap<>();
+        for (Object[] result : totalSupPrices) {
+            supPriceMap.put((String) result[0], (Double) result[1]);
+        }
+
+        List<Map<String, Object>> report = new ArrayList<>();
+        for (Object[] result : totalSalePrices) {
+            String storeName = (String) result[0];
+            Double totalSalePrice = (Double) result[1];
+            Double totalSupPrice = supPriceMap.getOrDefault(storeName, 0.0);
+            Double difference = totalSalePrice - totalSupPrice;
+
+            Map<String, Object> reportEntry = new HashMap<>();
+            reportEntry.put("storeName", storeName);
+            reportEntry.put("totalSupPrice", totalSupPrice);
+            reportEntry.put("totalSalePrice", totalSalePrice);
+            reportEntry.put("difference", difference);
+
+            report.add(reportEntry);
+        }
+
+        return report;
     }
+
 }
