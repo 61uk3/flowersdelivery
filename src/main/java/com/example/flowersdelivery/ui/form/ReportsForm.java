@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @UIScope
@@ -38,7 +39,7 @@ public class ReportsForm extends FormLayout {
     }
 
     private void generateExcel() {
-        List<Object[]> data = saleService.rotation();
+        List<Map<String, Object>> data = saleService.rotation();
         try {
             Workbook workbook = new HSSFWorkbook();
 
@@ -51,12 +52,12 @@ public class ReportsForm extends FormLayout {
             headerRow.createCell(3).setCellValue("Разница по сумме");
 
             int rowNum = 1;
-            for (Object[] rowData : data) {
+            for (Map<String, Object> rowData : data) {
                 Row row = sheet.createRow(rowNum++);
-                row.createCell(0).setCellValue((String) rowData[0]); // Имя магазина
-                row.createCell(1).setCellValue((Double) rowData[1]); // Разница
-                row.createCell(2).setCellValue((Double) rowData[2]); // Разница
-                row.createCell(3).setCellValue((Double) rowData[3]); // Разница
+                row.createCell(0).setCellValue((String) rowData.get("storeName")); // Имя магазина
+                row.createCell(1).setCellValue((Double) rowData.get("totalSupPrice")); // Разница
+                row.createCell(2).setCellValue((Double) rowData.get("totalSalePrice")); // Разница
+                row.createCell(3).setCellValue((Double) rowData.get("difference")); // Разница
             }
 
 
